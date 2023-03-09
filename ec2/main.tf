@@ -51,7 +51,7 @@ resource "aws_security_group" "sg1" {
 }
 
 resource "aws_route53_record" "record" {
-  zone_id = "Z103214126L48SQW30RSR"
+  zone_id = "Z048720123TW9BZ4BIA4Q"
   name    = "${var.component}-dev.devopsb71m.online"
   type    = "A"
   ttl     = 30
