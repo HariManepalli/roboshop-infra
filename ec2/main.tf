@@ -2,13 +2,15 @@ resource "aws_instance" "ec2" {
   ami                    = data.aws_ami.ami.image_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.sg.id]
-  iam_instance_profile = "${var.env}-${var.component}-role"
+  iam_instance_profile   = "${var.env}-${var.component}-role"
   tags = {
-    Name = var.component
+    Name    = var.component
+    Monitor = var.monitor ? "yes" : "no"
   }
 }
 
 resource "null_resource" "provisioner" {
+  depends_on = [aws_route53_record.record]
   provisioner "remote-exec" {
 
     connection {
@@ -18,7 +20,7 @@ resource "null_resource" "provisioner" {
     }
 
     inline = [
-      "ansible-pull -i localhost, -U https://github.com/HariManepalli/roboshop-ansible roboshop.yml -e role_name=${var.component}"
+      "ansible-pull -i localhost, -U https://github.com/HariManepalli/roboshop-ansible roboshop.yml -e role_name=${var.component} -e env=${var.env}"
     ]
 
   }
@@ -50,8 +52,8 @@ resource "aws_security_group" "sg" {
 }
 
 resource "aws_route53_record" "record" {
-  zone_id = "Z048720123TW9BZ4BIA4Q"
-  name    = "${var.component}-dev.devopsb71m.online"
+  zone_id = "Z103214126L48SQW30RSR"
+  name    = "${var.component}-dev.devopsb71.online"
   type    = "A"
   ttl     = 30
   records = [aws_instance.ec2.private_ip]
@@ -63,24 +65,24 @@ resource "aws_iam_policy" "ssm-policy" {
   description = "${var.env}-${var.component}-ssm"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Sid": "VisualEditor0",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "VisualEditor0",
+        "Effect" : "Allow",
+        "Action" : [
           "ssm:GetParameterHistory",
           "ssm:GetParametersByPath",
           "ssm:GetParameters",
           "ssm:GetParameter"
         ],
-        "Resource": "arn:aws:ssm:us-east-1:756512800685:parameter/${var.env}.${var.component}"
+        "Resource" : "arn:aws:ssm:us-east-1:756512800685:parameter/${var.env}.${var.component}*"
       },
       {
-        "Sid": "VisualEditor1",
-        "Effect": "Allow",
-        "Action": "ssm:DescribeParameters",
-        "Resource": "*"
+        "Sid" : "VisualEditor1",
+        "Effect" : "Allow",
+        "Action" : "ssm:DescribeParameters",
+        "Resource" : "*"
       }
     ]
   })
@@ -90,14 +92,14 @@ resource "aws_iam_role" "role" {
   name = "${var.env}-${var.component}-role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "ec2.amazonaws.com"
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "ec2.amazonaws.com"
         },
-        "Action": "sts:AssumeRole"
+        "Action" : "sts:AssumeRole"
       }
     ]
   })
