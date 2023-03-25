@@ -1,50 +1,29 @@
-instances = {
-  frontend = {
-    name    = "frontend"
-    type    = "t3.micro"
-    monitor = true
-  }
-  mongodb = {
-    name    = "mongodb"
-    type    = "t3.micro"
-  }
-  catalogue = {
-    name    = "catalogue"
-    type    = "t3.micro"
-    monitor = true
-  }
-  redis = {
-    name    = "redis"
-    type    = "t3.micro"
-  }
-  user = {
-    name    = "user"
-    type    = "t3.micro"
-    monitor = true
-  }
-  cart = {
-    name    = "cart"
-    type    = "t3.micro"
-    monitor = true
-  }
-  mysql = {
-    name    = "mysql"
-    type    = "t3.micro"
-  }
-  shipping = {
-    name    = "shipping"
-    type    = "t3.micro"
-    monitor = true
-  }
-  rabbitmq = {
-    name    = "rabbitmq"
-    type    = "t3.micro"
-  }
-  payment = {
-    name    = "payment"
-    type    = "t3.micro"
-    monitor = true
+env = "dev"
+
+vpc = {
+  main = {
+    cidr = "10.0.0.0/16"
+
+    public_subnets = {
+      public = {
+        name = "public"
+        cidr_block = ["10.0.0.0/24","10.0.0.0/24"]
+      }
+    }
+
+    private_subnets = {
+      web = {
+        name = "web"
+        cidr_block = ["10.0.2.0/24","10.0.3.0/24"]
+      }
+      app = {
+        name = "app"
+        cidr_block = ["10.0.4.0/24","10.0.5.0/24"]
+      }
+      db = {
+        name = "db"
+        cidr_block = ["10.0.6.0/24","10.0.7.0/24"]
+      }
+    }
   }
 }
-
-env = "dev"
