@@ -16,10 +16,10 @@ module "docdb" {
   env                 = var.env
   tags                = var.tags
 
-  subnet_ids                       = local.db_subnets_ids
+  subnet_ids          = local.db_subnet_ids
 
-  for_each        = var.docdb
-  engine          = each.value["engine"]
+  for_each                         = var.docdb
+  engine                           = each.value["engine"]
   backup_retention_period          = each.value["backup_retention_period"]
   preferred_backup_window          = each.value["preferred_backup_window"]
   skip_final_snapshot              = each.value["skip_final_snapshot"]
