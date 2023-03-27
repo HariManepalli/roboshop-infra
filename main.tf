@@ -26,6 +26,7 @@ module "docdb" {
   engine_version                   = each.value["engine_version"]
   no_of_instances                  = each.value["no_of_instances"]
   instance_class                   = each.value["instance_class"]
+
 }
 
 module "rds" {
