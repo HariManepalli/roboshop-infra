@@ -28,4 +28,19 @@ module "docdb" {
   instance_class                   = each.value["instance_class"]
 }
 
+module "rds" {
+  source = "git::https://github.com/HariManepalli/tf-module-rds.git"
+  env    = var.env
+  tags   = var.tags
+
+  subnet_ids = local.db_subnet_ids
+
+  for_each                = var.rds
+  engine                  = each.value["engine"]
+  backup_retention_period = each.value["backup_retention_period"]
+  preferred_backup_window = each.value["preferred_backup_window"]
+  engine_version          = each.value["engine_version"]
+  instance_class          = each.value["instance_class"]
+  no_of_instances         = each.value["no_of_instances"]
+}
 
