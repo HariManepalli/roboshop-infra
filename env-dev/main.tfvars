@@ -75,3 +75,36 @@ rds = {
     instance_class          = "db.t3.small"
   }
 }
+
+elasticache = {
+  main = {
+    engine          = "redis"
+    engine_version  = "6.x"
+    num_cache_nodes = 1
+    node_type       = "cache.t3.micro"
+    allow_subnets   = "app"
+  }
+}
+
+rabbitmq = {
+  main = {
+    instance_type = "t3.micro"
+  }
+}
+
+alb = {
+  public = {
+    subnet_name        = "public"
+    name               = "public"
+    internal           = false
+    load_balancer_type = "application"
+    allow_cidr         = ["0.0.0.0/0"]
+  }
+  private = {
+    subnet_name        = "app"
+    name               = "private"
+    internal           = true
+    load_balancer_type = "application"
+    allow_cidr         = ["10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
+  }
+}
