@@ -101,5 +101,5 @@ module "app" {
 
   for_each           = var.apps
   component          = each.value["component"]
-  instance_type      = each.value["instance-type"]
+  instance_type      = each.value["instance_type"]
 }
