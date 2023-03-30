@@ -8,7 +8,7 @@ variable "rds" {}
 variable "elasticache" {}
 variable "rabbitmq" {}
 variable "alb" {}
-variable "app" {}
+variable "apps" {}
 /*variable "bastion_cidr" {}
 variable "dns_domain" {}*/
 
