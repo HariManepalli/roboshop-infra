@@ -109,3 +109,11 @@ alb = {
     allow_cidr         = ["10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
   }
 }
+
+apps = {
+  catalogue = {
+    component = "catalogue"
+    instance_type = "t3.nano"
+  }
+
+}
