@@ -93,3 +93,13 @@ module "alb" {
   subnets            = lookup(local.subnet_ids, each.value["subnet_name"], null)
   allow_cidr         = each.value["allow_cidr"]
 }
+
+module "apps" {
+  source = "git::https://github.com/HariManepalli/tf-module-app.git"
+  env    = var.env
+  tags   = var.tags
+
+  for_each           = var.apps
+  component          = each.value["component"]
+  instance_type      = each.value["instance-type"]
+}
