@@ -94,7 +94,7 @@ module "alb" {
   allow_cidr         = each.value["allow_cidr"]
 }
 
-module "apps" {
+module "app" {
   source = "git::https://github.com/HariManepalli/tf-module-app.git"
   env    = var.env
   tags   = var.tags
