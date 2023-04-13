@@ -1,5 +1,5 @@
 module "vpc" {
-  source              = "git::https://github.com/HariManepalli/tf-module-vpc.git"
+  source              = "git::https://github.com/raghudevopsb71/tf-module-vpc.git"
   env                 = var.env
   tags                = var.tags
   default_route_table = var.default_route_table
@@ -31,7 +31,7 @@ module "docdb" {
 }
 
 module "rds" {
-  source = "git::https://github.com/HariManepalli/tf-module-rds.git"
+  source = "git::https://github.com/raghudevopsb71/tf-module-rds.git"
   env    = var.env
   tags   = var.tags
 
@@ -49,7 +49,7 @@ module "rds" {
 }
 
 module "elasticache" {
-  source = "git::https://github.com/HariManepalli/tf-module-elasticache.git"
+  source = "git::https://github.com/raghudevopsb71/tf-module-elasticache.git"
   env    = var.env
   tags   = var.tags
 
@@ -66,7 +66,7 @@ module "elasticache" {
 }
 
 module "rabbitmq" {
-  source       = "git::https://github.com/HariManepalli/tf-module-rabbitmq.git"
+  source       = "git::https://github.com/raghudevopsb71/tf-module-rabbitmq.git"
   env          = var.env
   tags         = var.tags
   bastion_cidr = var.bastion_cidr
@@ -82,7 +82,7 @@ module "rabbitmq" {
 }
 
 module "alb" {
-  source = "git::https://github.com/HariManepalli/tf-module-alb.git"
+  source = "git::https://github.com/raghudevopsb71/tf-module-alb.git"
   env    = var.env
   tags   = var.tags
 
@@ -98,28 +98,28 @@ module "alb" {
 
 module "app" {
 
-  depends_on = [module.docdb, module.rds, module.alb, module.elasticache, module.rabbitmq]
-  source = "git::https://github.com/HariManepalli/tf-module-app.git"
-  env    = var.env
-  tags   = var.tags
-  bastion_cidr = var.bastion_cidr
-  dns_domain   = var.dns_domain
+  depends_on = [module.vpc, module.docdb, module.rds, module.elasticache, module.alb, module.rabbitmq]
+
+  source           = "git::https://github.com/raghudevopsb71/tf-module-app.git"
+  env              = var.env
+  tags             = var.tags
+  bastion_cidr     = var.bastion_cidr
+  monitoring_nodes = var.monitoring_nodes
+  dns_domain       = var.dns_domain
 
   vpc_id = module.vpc["main"].vpc_id
 
-  for_each           = var.apps
-  component          = each.value["component"]
-  instance_type      = each.value["instance_type"]
-  desired_capacity   = each.value["desired_capacity"]
-  max_size           = each.value["max_size"]
-  min_size           = each.value["min_size"]
-  port               = each.value["port"]
-  listener_priority  = each.value["listener_priority"]
-  parameters         = each.value["parameters"]
-  subnets            = lookup(local.subnet_ids, each.value["subnet_name"], null)
-  allow_app_to       = lookup(local.subnet_cidr, each.value["allow_app_to"], null)
-  alb_dns_name       = lookup(lookup(lookup(module.alb, each.value["alb"], null), "alb", null), "dns_name", null)
-  listener_arn       = lookup(lookup(lookup(module.alb, each.value["alb"], null), "listener", null), "arn", null)
-
+  for_each          = var.apps
+  component         = each.value["component"]
+  instance_type     = each.value["instance_type"]
+  desired_capacity  = each.value["desired_capacity"]
+  max_size          = each.value["max_size"]
+  min_size          = each.value["min_size"]
+  port              = each.value["port"]
+  listener_priority = each.value["listener_priority"]
+  parameters        = each.value["parameters"]
+  subnets           = lookup(local.subnet_ids, each.value["subnet_name"], null)
+  allow_app_to      = lookup(local.subnet_cidr, each.value["allow_app_to"], null)
+  alb_dns_name      = lookup(lookup(lookup(module.alb, each.value["alb"], null), "alb", null), "dns_name", null)
+  listener_arn      = lookup(lookup(lookup(module.alb, each.value["alb"], null), "listener", null), "arn", null)
 }
-
