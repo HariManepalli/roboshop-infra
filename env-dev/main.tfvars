@@ -130,7 +130,7 @@ apps = {
     listener_priority = 10
     parameters        = ["docdb"]
   }
-  cart = {
+  /*cart = {
     component         = "cart"
     instance_type     = "t3.small"
     desired_capacity  = 1
@@ -181,7 +181,7 @@ apps = {
     alb               = "private"
     listener_priority = 14
     parameters        = ["rabbitmq"]
-  }
+  }*/
   frontend = {
     component         = "frontend"
     instance_type     = "t3.small"
