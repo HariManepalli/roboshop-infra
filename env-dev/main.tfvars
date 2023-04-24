@@ -1,5 +1,5 @@
 env              = "dev"
-bastion_cidr     = ["172.31.7.180/32"]
+bastion_cidr     = ["172.31.7.39/32"]
 monitoring_nodes = ["172.31.2.203/32"]
 dns_domain       = "devopsb71m.online"
 
